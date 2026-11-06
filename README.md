@@ -20,15 +20,15 @@ máy học trọng số     đặc trưng          pre-train + gắn "đầu"  c
                                         phân loại lên trên
 ```
 
-| Phần | Thời gian | Cách tiếp cận | Bạn tự làm gì |
-| --- | --- | --- | --- |
-| 0 | 0:00 – 0:10 | Cài đặt, khám phá dữ liệu | Tìm tin trùng lặp, hiểu vì sao accuracy dễ đánh lừa |
-| 1 | 0:10 – 0:40 | **Machine Learning** | Bag-of-words + logistic regression **từ đầu bằng numpy** + precision/recall/F1 |
-| 2 | 0:40 – 1:05 | **Deep Learning** | Mạng MLP + vòng lặp huấn luyện PyTorch, nhận diện overfitting |
-| 3 | 1:05 – 1:30 | **Embedding** | Cosine, tìm kiếm theo nghĩa, kNN trên vector của encoder `all-MiniLM-L6-v2` |
-| — | 1:30 – 1:35 | Nghỉ | |
-| 4 | 1:35 – 2:05 | **LLM** | `call_openai` (đúng chữ ký template LLM API), prompt zero/few-shot, đo chi phí |
-| 5 | 2:05 – 2:30 | Tổng hợp | Bảng so sánh, **biểu đồ đánh đổi 1 − F1 ↔ độ trễ**, **stress test 50 case khó**, thử thách cá nhân, nộp bài |
+| Phần | Thời gian   | Cách tiếp cận             | Bạn tự làm gì                                                                                               |
+| ---- | ----------- | ------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| 0    | 0:00 – 0:10 | Cài đặt, khám phá dữ liệu | Tìm tin trùng lặp, hiểu vì sao accuracy dễ đánh lừa                                                         |
+| 1    | 0:10 – 0:40 | **Machine Learning**      | Bag-of-words + logistic regression **từ đầu bằng numpy** + precision/recall/F1                              |
+| 2    | 0:40 – 1:05 | **Deep Learning**         | Mạng MLP + vòng lặp huấn luyện PyTorch, nhận diện overfitting                                               |
+| 3    | 1:05 – 1:30 | **Embedding**             | Cosine, tìm kiếm theo nghĩa, kNN trên vector của encoder `all-MiniLM-L6-v2`                                 |
+| —    | 1:30 – 1:35 | Nghỉ                      |                                                                                                             |
+| 4    | 1:35 – 2:05 | **LLM**                   | `call_openai` (đúng chữ ký template LLM API), prompt zero/few-shot, đo chi phí                              |
+| 5    | 2:05 – 2:30 | Tổng hợp                  | Bảng so sánh, **biểu đồ đánh đổi 1 − F1 ↔ độ trễ**, **stress test 50 case khó**, thử thách cá nhân, nộp bài |
 
 ## Mục tiêu học tập
 
@@ -58,13 +58,13 @@ flowchart LR
     F -- không --> H["✅ ham (0)"]
 ```
 
-| Bước | Machine Learning (Phần 1) | Deep Learning (Phần 2) | Encoder (Phần 3) | LLM (Phần 4) |
-| --- | --- | --- | --- | --- |
-| ① Tách token | tách theo từ | tách theo từ | tách thành sub-word (WordPiece) | tách thành token của GPT |
-| ② Biểu diễn | **người** chọn: từ điển 2.000 từ, có/không (0/1) | như ML | **mượn** encoder pre-train → vector 384 chiều theo *nghĩa* | LLM tự đọc cả prompt |
-| ③ Bộ phân loại | `z = w·x + b` (1 lớp) | mạng có hidden layer, **tự học** đặc trưng | kNN / LogReg / MLP gắn lên trên | LLM **sinh ra chữ** `spam` / `ham` |
-| ④–⑤ Ra nhãn | σ rồi so ngưỡng 0.5 | σ rồi so ngưỡng 0.5 | bỏ phiếu, hoặc σ rồi so ngưỡng | đọc chữ trả về (`parse_label`) |
-| **Học từ dữ liệu có nhãn** | trọng số `w`, `b` | toàn bộ mạng | chỉ phần bộ phân loại (encoder giữ nguyên) | không học gì, chỉ viết prompt |
+| Bước                       | Machine Learning (Phần 1)                        | Deep Learning (Phần 2)                     | Encoder (Phần 3)                                           | LLM (Phần 4)                       |
+| -------------------------- | ------------------------------------------------ | ------------------------------------------ | ---------------------------------------------------------- | ---------------------------------- |
+| ① Tách token               | tách theo từ                                     | tách theo từ                               | tách thành sub-word (WordPiece)                            | tách thành token của GPT           |
+| ② Biểu diễn                | **người** chọn: từ điển 2.000 từ, có/không (0/1) | như ML                                     | **mượn** encoder pre-train → vector 384 chiều theo _nghĩa_ | LLM tự đọc cả prompt               |
+| ③ Bộ phân loại             | `z = w·x + b` (1 lớp)                            | mạng có hidden layer, **tự học** đặc trưng | kNN / LogReg / MLP gắn lên trên                            | LLM **sinh ra chữ** `spam` / `ham` |
+| ④–⑤ Ra nhãn                | σ rồi so ngưỡng 0.5                              | σ rồi so ngưỡng 0.5                        | bỏ phiếu, hoặc σ rồi so ngưỡng                             | đọc chữ trả về (`parse_label`)     |
+| **Học từ dữ liệu có nhãn** | trọng số `w`, `b`                                | toàn bộ mạng                               | chỉ phần bộ phân loại (encoder giữ nguyên)                 | không học gì, chỉ viết prompt      |
 
 ### Theo chân một tin nhắn qua từng cách
 
@@ -147,7 +147,7 @@ flowchart LR
   (few-shot). Không có bước train nào.
 - **Cái giá:** mỗi tin là một lần gọi API qua mạng, nên chậm nhất, tốn tiền theo số token, và có khi trả lời "lạc
   đề". Vì thế cần `temperature=0`, `max_completion_tokens` nhỏ và hàm `parse_label` chịu được lỗi. Model GPT-6 là
-  *reasoning model*: phải gửi `reasoning_effort="none"`, nếu không 3 token giới hạn bị dùng hết cho suy luận và câu trả lời rỗng.
+  _reasoning model_: phải gửi `reasoning_effort="none"`, nếu không 3 token giới hạn bị dùng hết cho suy luận và câu trả lời rỗng.
 - **Trong notebook:** `build_classification_prompt` → `call_openai` (+ `retry_with_backoff`) → `parse_label` →
   `llm_classify_batch`.
 
@@ -167,14 +167,14 @@ flowchart TB
     TRAIN -->|"trọng số đã học"| USE
 ```
 
-| | ML | DL | Encoder + head | LLM |
-| --- | --- | --- | --- | --- |
-| Ai tạo đặc trưng? | người (từ điển) | mạng tự học tổ hợp từ | mượn từ mô hình pre-train | mô hình pre-train khổng lồ |
-| Cái gì được train trong bài? | `w`, `b` | toàn bộ MLP | chỉ head (kNN: không gì) | không gì |
-| Cần dữ liệu có nhãn? | nhiều | nhiều | ít hơn | gần như không |
-| Hiểu từ đồng nghĩa? | ❌ | ❌ (vẫn dùng BoW) | ✅ | ✅ |
-| Chạy ở đâu? | máy của bạn | máy của bạn | máy của bạn (nặng hơn) | server của OpenAI |
-| Tốc độ / chi phí | rất nhanh, miễn phí | rất nhanh, miễn phí | chậm hơn, miễn phí | chậm nhất, tốn tiền theo token |
+|                              | ML                  | DL                    | Encoder + head            | LLM                            |
+| ---------------------------- | ------------------- | --------------------- | ------------------------- | ------------------------------ |
+| Ai tạo đặc trưng?            | người (từ điển)     | mạng tự học tổ hợp từ | mượn từ mô hình pre-train | mô hình pre-train khổng lồ     |
+| Cái gì được train trong bài? | `w`, `b`            | toàn bộ MLP           | chỉ head (kNN: không gì)  | không gì                       |
+| Cần dữ liệu có nhãn?         | nhiều               | nhiều                 | ít hơn                    | gần như không                  |
+| Hiểu từ đồng nghĩa?          | ❌                  | ❌ (vẫn dùng BoW)     | ✅                        | ✅                             |
+| Chạy ở đâu?                  | máy của bạn         | máy của bạn           | máy của bạn (nặng hơn)    | server của OpenAI              |
+| Tốc độ / chi phí             | rất nhanh, miễn phí | rất nhanh, miễn phí   | chậm hơn, miễn phí        | chậm nhất, tốn tiền theo token |
 
 > Nhanh hơn chưa chắc đã tốt hơn, và hiểu nghĩa chưa chắc đã đáng tiền. Bảng so sánh ở Phần 5 giúp bạn trả lời
 > câu hỏi này **bằng số đo của chính mình**.
@@ -184,15 +184,15 @@ flowchart TB
 Cuối bài (Phần 5), notebook gom mọi phương án vào **một bảng**. Mỗi hàng ghép một cách **biểu diễn** với một
 **bộ phân loại**, theo đúng khung 5 bước ở mục [Bản chất](#bản-chất-từ-văn-bản-đến-nhãn-mỗi-cách-làm-gì).
 
-| Hàng | Biểu diễn | Bộ phân loại | Train những gì? | Hidden layer? | Đánh giá trên |
-| --- | --- | --- | --- | --- | --- |
-| **1. BoW + LogReg** | Bag-of-words 2.000 từ | Logistic regression (1 lớp tuyến tính) | Trọng số của từng từ | ❌ | toàn bộ test |
-| **2. BoW + MLP** | Bag-of-words 2.000 từ | MLP: Linear → ReLU → Linear | Toàn bộ mạng | ✅ 64 nơ-ron | toàn bộ test |
-| **3a. Encoder (MiniLM) + kNN** | Encoder MiniLM, **đóng băng** → vector 384 chiều | 5 tin train gần nhất bỏ phiếu | ❌ không train gì, chỉ lưu vector của tập train | ❌ | toàn bộ test |
-| **3b. Encoder (MiniLM) + LogReg** | như 3a | Logistic regression của Phần 1 | Chỉ phần LogReg | ❌ | toàn bộ test |
-| **3c. Encoder (MiniLM) + MLP head** | như 3a | MLP của Phần 2 | Chỉ phần MLP (encoder giữ nguyên) | ✅ 64 nơ-ron | toàn bộ test |
-| **4a / 4b. LLM zero-shot** | — | `gpt-6-luna` / `gpt-6.1-terra` đọc prompt | ❌ không train | — | SUB 40 tin |
-| **4c. LLM few-shot** | — | `gpt-6-luna` + 4 ví dụ mẫu trong prompt | ❌ không train | — | SUB 40 tin |
+| Hàng                                | Biểu diễn                                        | Bộ phân loại                              | Train những gì?                                 | Hidden layer? | Đánh giá trên |
+| ----------------------------------- | ------------------------------------------------ | ----------------------------------------- | ----------------------------------------------- | ------------- | ------------- |
+| **1. BoW + LogReg**                 | Bag-of-words 2.000 từ                            | Logistic regression (1 lớp tuyến tính)    | Trọng số của từng từ                            | ❌            | toàn bộ test  |
+| **2. BoW + MLP**                    | Bag-of-words 2.000 từ                            | MLP: Linear → ReLU → Linear               | Toàn bộ mạng                                    | ✅ 64 nơ-ron  | toàn bộ test  |
+| **3a. Encoder (MiniLM) + kNN**      | Encoder MiniLM, **đóng băng** → vector 384 chiều | 5 tin train gần nhất bỏ phiếu             | ❌ không train gì, chỉ lưu vector của tập train | ❌            | toàn bộ test  |
+| **3b. Encoder (MiniLM) + LogReg**   | như 3a                                           | Logistic regression của Phần 1            | Chỉ phần LogReg                                 | ❌            | toàn bộ test  |
+| **3c. Encoder (MiniLM) + MLP head** | như 3a                                           | MLP của Phần 2                            | Chỉ phần MLP (encoder giữ nguyên)               | ✅ 64 nơ-ron  | toàn bộ test  |
+| **4a / 4b. LLM zero-shot**          | —                                                | `gpt-6-luna` / `gpt-6.1-terra` đọc prompt | ❌ không train                                  | —             | SUB 40 tin    |
+| **4c. LLM few-shot**                | —                                                | `gpt-6-luna` + 4 ví dụ mẫu trong prompt   | ❌ không train                                  | —             | SUB 40 tin    |
 
 Các cặp nên so sánh:
 
@@ -206,16 +206,16 @@ Các cặp nên so sánh:
 
 ### Cách đọc bảng so sánh
 
-| Cột | Ý nghĩa |
-| --- | --- |
-| `precision` | Trong số tin bị chặn, bao nhiêu % là spam thật. Thấp nghĩa là **chặn nhầm** tin thường (ví dụ mất tin OTP). |
-| `recall` | Trong số spam thật, bắt được bao nhiêu %. Thấp nghĩa là **spam lọt** qua. |
-| `F1 (test)` | Trung bình điều hoà của precision và recall trên toàn bộ tập test (~775 tin, ~13% spam). Đây là cột chính để so chất lượng hàng 1–3. |
-| `F1 (SUB 40)` | F1 trên 40 tin cân bằng (20 spam / 20 ham). **Chỉ cột này so được với LLM.** Vì SUB cân bằng nên con số thường cao hơn thực tế. |
-| `train (s)` | Thời gian chuẩn bị mô hình. Với 3a/3b/3c, gồm thời gian encoder encode tập train (+ train phần LogReg / MLP). Với LLM là 0. |
-| `tin/s (cả lô)` | Thông lượng khi phân loại cả tập test một lượt. |
+| Cột                | Ý nghĩa                                                                                                                                                                       |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `precision`        | Trong số tin bị chặn, bao nhiêu % là spam thật. Thấp nghĩa là **chặn nhầm** tin thường (ví dụ mất tin OTP).                                                                   |
+| `recall`           | Trong số spam thật, bắt được bao nhiêu %. Thấp nghĩa là **spam lọt** qua.                                                                                                     |
+| `F1 (test)`        | Trung bình điều hoà của precision và recall trên toàn bộ tập test (~775 tin, ~13% spam). Đây là cột chính để so chất lượng hàng 1–3.                                          |
+| `F1 (SUB 40)`      | F1 trên 40 tin cân bằng (20 spam / 20 ham). **Chỉ cột này so được với LLM.** Vì SUB cân bằng nên con số thường cao hơn thực tế.                                               |
+| `train (s)`        | Thời gian chuẩn bị mô hình. Với 3a/3b/3c, gồm thời gian encoder encode tập train (+ train phần LogReg / MLP). Với LLM là 0.                                                   |
+| `tin/s (cả lô)`    | Thông lượng khi phân loại cả tập test một lượt.                                                                                                                               |
 | `p50 / p95 ms/tin` | Độ trễ khi gọi **từng tin một** như một request thật, **tính từ văn bản thô** (gồm cả vectorize / encode / gọi API). p95 nghĩa là 95% số tin xong trong khoảng thời gian này. |
-| `USD / 1k tin` | Chi phí API (chỉ LLM có, hàng 1–3 bằng 0). |
+| `USD / 1k tin`     | Chi phí API (chỉ LLM có, hàng 1–3 bằng 0).                                                                                                                                    |
 
 Lưu ý khi so sánh:
 
@@ -239,36 +239,36 @@ chuyển sang bản gốc trên UCI. Sau khi bỏ 403 tin trùng lặp còn 5.16
 
 50 tin nhắn viết tay để đánh lừa model, có cột `why_tricky` giải thích bẫy của từng case:
 
-| Nhóm (`category`) | Số case | Nhãn |
-| --- | ---: | --- |
-| `ham_looks_spam`: tưởng spam nhưng không phải | 10 | ham |
-| `natural_spam`: spam giọng tự nhiên, không từ khoá | 10 | spam |
-| `manipulation`: thao túng / lừa đảo, mạo danh | 8 | spam |
-| `obfuscation`: né từ khoá (`C0ngr4tulat10ns`, `F R E E`) | 6 | spam |
-| `prompt_injection`: câu ra lệnh cho LLM đổi nhãn | 6 | 5 spam · 1 ham |
-| `transactional_ham`: OTP, lịch hẹn, đơn hàng | 6 | ham |
-| `talks_about_spam`: kể lại / cảnh báo tin lừa đảo | 4 | ham |
+| Nhóm (`category`)                                        | Số case | Nhãn           |
+| -------------------------------------------------------- | ------: | -------------- |
+| `ham_looks_spam`: tưởng spam nhưng không phải            |      10 | ham            |
+| `natural_spam`: spam giọng tự nhiên, không từ khoá       |      10 | spam           |
+| `manipulation`: thao túng / lừa đảo, mạo danh            |       8 | spam           |
+| `obfuscation`: né từ khoá (`C0ngr4tulat10ns`, `F R E E`) |       6 | spam           |
+| `prompt_injection`: câu ra lệnh cho LLM đổi nhãn         |       6 | 5 spam · 1 ham |
+| `transactional_ham`: OTP, lịch hẹn, đơn hàng             |       6 | ham            |
+| `talks_about_spam`: kể lại / cảnh báo tin lừa đảo        |       4 | ham            |
 
 Trên lời giải tham khảo, F1 của các model tụt từ khoảng 0,9 (test thường) xuống 0,4–0,7 trên bộ này. Học viên còn có thể thêm case của riêng mình (`MY_CASES`) để thử.
 
 ## Chọn nhà cung cấp LLM API
 
-Phần 4 không bắt buộc dùng OpenAI. Thêm key vào Colab → 🔑 **Secrets** (bật *Notebook access*), rồi sửa một dòng
+Phần 4 không bắt buộc dùng OpenAI. Thêm key vào Colab → 🔑 **Secrets** (bật _Notebook access_), rồi sửa một dòng
 `LLM_PROVIDER = "..."` trong notebook:
 
-| `LLM_PROVIDER` | Colab Secret | Model lớn / nhỏ mặc định | Cách gọi |
-| --- | --- | --- | --- |
-| `openai` (mặc định) | `OPENAI_API_KEY` | `gpt-6.1-terra` / `gpt-6-luna` | `call_openai` (OpenAI SDK) |
-| `anthropic` | `ANTHROPIC_API_KEY` | `claude-opus-5-5` / `claude-haiku-5-5` | `call_claude` (SDK chính thức `anthropic`) |
-| `gemini` | `GEMINI_API_KEY` | `gemini-3.8-flash` / `gemini-3.5-flash-lite` | `call_openai` + `base_url` Gemini (có gói miễn phí) |
-| `groq` | `GROQ_API_KEY` | `openai/gpt-oss-120b` / `openai/gpt-oss-20b` | `call_openai` + `base_url` Groq (có gói miễn phí) |
-| `openrouter` | `OPENROUTER_API_KEY` | `openai/gpt-6.1-terra` / `openai/gpt-6-luna` | `call_openai` + `base_url` OpenRouter |
-| `ollama` | — | `llama3.2:3b` / `qwen2.5:0.5b` | `call_openai` + `base_url` local (chạy trên máy cá nhân) |
+| `LLM_PROVIDER`      | Colab Secret         | Model lớn / nhỏ mặc định                     | Cách gọi                                                 |
+| ------------------- | -------------------- | -------------------------------------------- | -------------------------------------------------------- |
+| `openai` (mặc định) | `OPENAI_API_KEY`     | `gpt-6.1-terra` / `gpt-6-luna`               | `call_openai` (OpenAI SDK)                               |
+| `anthropic`         | `ANTHROPIC_API_KEY`  | `claude-opus-5-5` / `claude-haiku-5-5`       | `call_claude` (SDK chính thức `anthropic`)               |
+| `gemini`            | `GEMINI_API_KEY`     | `gemini-3.8-flash` / `gemini-3.5-flash-lite` | `call_openai` + `base_url` Gemini (có gói miễn phí)      |
+| `groq`              | `GROQ_API_KEY`       | `openai/gpt-oss-120b` / `openai/gpt-oss-20b` | `call_openai` + `base_url` Groq (có gói miễn phí)        |
+| `openrouter`        | `OPENROUTER_API_KEY` | `openai/gpt-6.1-terra` / `openai/gpt-6-luna` | `call_openai` + `base_url` OpenRouter                    |
+| `ollama`            | —                    | `llama3.2:3b` / `qwen2.5:0.5b`               | `call_openai` + `base_url` local (chạy trên máy cá nhân) |
 
 - Đúng như slide 21, phần lớn engine nói chuẩn **OpenAI-compatible API**, nên chỉ cần đổi `base_url`; hàm `call_openai` của
   học viên (giữ chữ ký template) không đổi. Claude được gọi bằng SDK `anthropic` qua hàm có sẵn `call_claude`. Hàm `call_llm`
   tự chọn đúng đường theo `LLM_PROVIDER`.
-- Tên model thay đổi nhanh. Nếu gặp lỗi *model not found*, chạy ô `list_models()` rồi sửa `PROVIDERS[...]`.
+- Tên model thay đổi nhanh. Nếu gặp lỗi _model not found_, chạy ô `list_models()` rồi sửa `PROVIDERS[...]`.
 - Model suy luận (Gemini 3, gpt-oss) và Claude cần `max_tokens` lớn hơn (512–1024) để còn chỗ cho phần "suy nghĩ"; bảng
   `PROVIDERS` đã đặt sẵn.
 - Mỗi provider tắt/giảm phần "suy nghĩ" bằng tham số khác nhau (OpenAI `reasoning_effort="none"` + `max_completion_tokens`,
@@ -277,28 +277,28 @@ Phần 4 không bắt buộc dùng OpenAI. Thêm key vào Colab → 🔑 **Secre
 - `gemini-2.5-pro` / `-flash` bị Google tắt ngày 01/12/2026, nên bảng dùng dòng Gemini 3.
 - Giá trong `PRICE_PER_1M` là giá tham khảo; model chưa có giá được tính 0 USD. Tự điền giá hiện hành nếu cần so chi phí.
 - Stress test có thêm phương án **4d. LLM + prompt phòng thủ** (`build_defended_prompt`): tin nhắn được đặt trong thẻ `<sms>` và
-  được coi là dữ liệu, không phải chỉ dẫn, để so với prompt thường trên nhóm *prompt injection*.
+  được coi là dữ liệu, không phải chỉ dẫn, để so với prompt thường trên nhóm _prompt injection_.
 
 ## Luật chơi: học để hiểu, không vibe code
 
-| Cơ chế | Cách hoạt động |
-| --- | --- |
-| 🚫 Vùng tự code (Phần 1–3) | Không dùng AI để *viết* code; được hỏi AI để *giải thích khái niệm*. Hàm của bạn không được dùng `sklearn`, vì bộ kiểm tra đọc mã nguồn. |
-| ✅ Vùng được dùng AI (Phần 4) | Được dùng AI viết code, nhưng phải ghi **AI log** và tự review trước khi gọi API. |
-| 🔮 Dự đoán trước khi chạy | Ô thí nghiệm **báo lỗi** nếu chưa gọi `predict("key", "...")`. Dự đoán sai không bị trừ điểm; không dự đoán mới bị trừ. |
-| 🎲 Dữ liệu riêng | Cách chia train/test phụ thuộc MSSV, nên số liệu của mỗi người là duy nhất. |
-| ✍️ Tính tay | 5 phép tính làm trên giấy, chụp ảnh nộp kèm. |
-| 🐞 Bắt lỗi | 3 đoạn code "do AI viết" có lỗi phương pháp; bạn phải chỉ ra lỗi. |
-| 🎯 Thử thách cá nhân | Mỗi người nhận một đề sửa code khác nhau, làm trong 15 phút, không dùng AI. |
-| 🗣️ Vấn đáp | Lab Coach có thể hỏi bất kỳ dòng code nào bạn nộp. |
+| Cơ chế                        | Cách hoạt động                                                                                                                           |
+| ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| 🚫 Vùng tự code (Phần 1–3)    | Không dùng AI để _viết_ code; được hỏi AI để _giải thích khái niệm_. Hàm của bạn không được dùng `sklearn`, vì bộ kiểm tra đọc mã nguồn. |
+| ✅ Vùng được dùng AI (Phần 4) | Được dùng AI viết code, nhưng phải ghi **AI log** và tự review trước khi gọi API.                                                        |
+| 🔮 Dự đoán trước khi chạy     | Ô thí nghiệm **báo lỗi** nếu chưa gọi `predict("key", "...")`. Dự đoán sai không bị trừ điểm; không dự đoán mới bị trừ.                  |
+| 🎲 Dữ liệu riêng              | Cách chia train/test phụ thuộc MSSV, nên số liệu của mỗi người là duy nhất.                                                              |
+| ✍️ Tính tay                   | 5 phép tính làm trên giấy, chụp ảnh nộp kèm.                                                                                             |
+| 🐞 Bắt lỗi                    | 3 đoạn code "do AI viết" có lỗi phương pháp; bạn phải chỉ ra lỗi.                                                                        |
+| 🎯 Thử thách cá nhân          | Mỗi người nhận một đề sửa code khác nhau, làm trong 15 phút, không dùng AI.                                                              |
+| 🗣️ Vấn đáp                    | Lab Coach có thể hỏi bất kỳ dòng code nào bạn nộp.                                                                                       |
 
 ## Checklist trước khi bắt đầu
 
-- [ ] Đăng nhập được tài khoản GitHub và tài khoản Google dùng cho Colab.
-- [ ] Dùng Chrome hoặc Edge phiên bản mới, Internet ổn định.
-- [ ] Có **một** API key LLM cho Phần 4 (OpenAI, Claude, Gemini, Groq hoặc OpenRouter, xem [Chọn nhà cung cấp LLM API](#chọn-nhà-cung-cấp-llm-api)). Không có key vẫn làm được Phần 0–3.
-- [ ] Biết mã khóa (`KHOA`, ví dụ `K5`), họ tên không dấu và MSSV để đặt tên repository.
-- [ ] Giấy và bút cho phần tính tay.
+- [x] Đăng nhập được tài khoản GitHub và tài khoản Google dùng cho Colab.
+- [x] Dùng Chrome hoặc Edge phiên bản mới, Internet ổn định.
+- [x] Có **một** API key LLM cho Phần 4 (OpenAI, Claude, Gemini, Groq hoặc OpenRouter, xem [Chọn nhà cung cấp LLM API](#chọn-nhà-cung-cấp-llm-api)). Không có key vẫn làm được Phần 0–3.
+- [x] Biết mã khóa (`KHOA`, ví dụ `K5`), họ tên không dấu và MSSV để đặt tên repository.
+- [x] Giấy và bút cho phần tính tay.
 
 ## Hướng dẫn từng bước
 
@@ -350,16 +350,16 @@ git push
 
 ## Lỗi thường gặp
 
-| Hiện tượng | Cách xử lý |
-| --- | --- |
-| `✋ Hãy điền STUDENT_ID` | Điền MSSV vào ô `STUDENT_ID`, chạy lại ô đó và ô bộ công cụ. |
-| `✋ Chưa có dự đoán!` | Đây là thiết kế của bài, không phải lỗi: chạy ô `predict("...", "...")` ngay phía trên trước. |
-| `⬜ ... chưa làm` / `NotImplementedError` | Bạn chưa hoàn thành TODO đó; các ô phía sau dùng hàm này sẽ lỗi theo. |
-| Kaggle tải lỗi | Notebook tự chuyển sang nguồn UCI. Nếu cả hai lỗi, kiểm tra Internet rồi **Run all** lại. |
-| Phần 3 encode chậm | Bình thường trên CPU (khoảng 1 phút). Có thể bật GPU T4. |
-| Phần 4 báo không có key | Thêm `OPENAI_API_KEY` vào Colab Secrets và bật *Notebook access*, rồi chạy lại ô API key. |
-| `RateLimitError` | `retry_with_backoff` sẽ tự thử lại; nếu vẫn lỗi, chờ 1 phút rồi chạy lại ô đó. |
-| Ô sau lỗi vì thiếu biến | Chọn `Runtime → Restart session` rồi **Run all** từ đầu. |
+| Hiện tượng                                | Cách xử lý                                                                                    |
+| ----------------------------------------- | --------------------------------------------------------------------------------------------- |
+| `✋ Hãy điền STUDENT_ID`                  | Điền MSSV vào ô `STUDENT_ID`, chạy lại ô đó và ô bộ công cụ.                                  |
+| `✋ Chưa có dự đoán!`                     | Đây là thiết kế của bài, không phải lỗi: chạy ô `predict("...", "...")` ngay phía trên trước. |
+| `⬜ ... chưa làm` / `NotImplementedError` | Bạn chưa hoàn thành TODO đó; các ô phía sau dùng hàm này sẽ lỗi theo.                         |
+| Kaggle tải lỗi                            | Notebook tự chuyển sang nguồn UCI. Nếu cả hai lỗi, kiểm tra Internet rồi **Run all** lại.     |
+| Phần 3 encode chậm                        | Bình thường trên CPU (khoảng 1 phút). Có thể bật GPU T4.                                      |
+| Phần 4 báo không có key                   | Thêm `OPENAI_API_KEY` vào Colab Secrets và bật _Notebook access_, rồi chạy lại ô API key.     |
+| `RateLimitError`                          | `retry_with_backoff` sẽ tự thử lại; nếu vẫn lỗi, chờ 1 phút rồi chạy lại ô đó.                |
+| Ô sau lỗi vì thiếu biến                   | Chọn `Runtime → Restart session` rồi **Run all** từ đầu.                                      |
 
 ## Quy tắc quan trọng
 
@@ -374,23 +374,23 @@ git push
 
 ## Tệp trong repository
 
-| Tệp | Dùng để làm gì |
-| --- | --- |
-| `RULES.md` · `CHECKPOINTS.md` · `SUBMISSION.md` · `RUBRIC.md` | luật, mốc kiểm tra, cách nộp, tiêu chí chấm |
-| `src/day01_spam_ml_dl_embedding_llm.ipynb` | notebook bài lab (làm trên Colab) — xem [src/README.md](src/README.md) |
-| `src/data/hard_eval_50.csv` | 50 case khó để stress test (đã nhúng sẵn trong notebook) |
-| `src/requirements.txt` | thư viện nếu muốn chạy trên máy cá nhân |
-| `src/optional_llm_api/` | side lab LLM API tuỳ chọn (bonus) |
-| `docs/` | tài liệu dài: bài tập side lab — xem [docs/README.md](docs/README.md) |
-| `report/individual/` | thư mục học viên upload bài làm (có sẵn mẫu `MSSV_HoTen.md`) |
-| `tests/test_repository_contract.py` | kiểm tra notebook hợp lệ, sạch output, đủ TODO |
-| `tests/test_solution.py` | test (dùng mock) cho side lab; tự bỏ qua khi chưa có bài làm |
-| `.env.example` | mẫu biến môi trường khi chạy trên máy; **không** commit `.env` |
-| `THIRD_PARTY_NOTICES.md` | nguồn và license của dữ liệu, model |
+| Tệp                                                           | Dùng để làm gì                                                         |
+| ------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| `RULES.md` · `CHECKPOINTS.md` · `SUBMISSION.md` · `RUBRIC.md` | luật, mốc kiểm tra, cách nộp, tiêu chí chấm                            |
+| `src/day01_spam_ml_dl_embedding_llm.ipynb`                    | notebook bài lab (làm trên Colab) — xem [src/README.md](src/README.md) |
+| `src/data/hard_eval_50.csv`                                   | 50 case khó để stress test (đã nhúng sẵn trong notebook)               |
+| `src/requirements.txt`                                        | thư viện nếu muốn chạy trên máy cá nhân                                |
+| `src/optional_llm_api/`                                       | side lab LLM API tuỳ chọn (bonus)                                      |
+| `docs/`                                                       | tài liệu dài: bài tập side lab — xem [docs/README.md](docs/README.md)  |
+| `report/individual/`                                          | thư mục học viên upload bài làm (có sẵn mẫu `MSSV_HoTen.md`)           |
+| `tests/test_repository_contract.py`                           | kiểm tra notebook hợp lệ, sạch output, đủ TODO                         |
+| `tests/test_solution.py`                                      | test (dùng mock) cho side lab; tự bỏ qua khi chưa có bài làm           |
+| `.env.example`                                                | mẫu biến môi trường khi chạy trên máy; **không** commit `.env`         |
+| `THIRD_PARTY_NOTICES.md`                                      | nguồn và license của dữ liệu, model                                    |
 
 ## Nguồn
 
-- Almeida, T. A., Hidalgo, J. M. G., & Yamakami, A. (2011). *Contributions to the Study of SMS Spam Filtering.* — [UCI SMS Spam Collection](https://archive.ics.uci.edu/dataset/228/sms+spam+collection)
+- Almeida, T. A., Hidalgo, J. M. G., & Yamakami, A. (2011). _Contributions to the Study of SMS Spam Filtering._ — [UCI SMS Spam Collection](https://archive.ics.uci.edu/dataset/228/sms+spam+collection)
 - [Sentence-Transformers `all-MiniLM-L6-v2`](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2)
 - [OpenAI Chat Completions API](https://developers.openai.com/api/docs/api-reference/chat)
 - [OpenAI — Deprecations](https://developers.openai.com/api/docs/deprecations): `gpt-4o`, `gpt-4o-mini`, `gpt-4.1-mini` bị gỡ khỏi API ngày 14/01/2027; lab dùng `gpt-6-luna` / `gpt-6.1-terra`.
